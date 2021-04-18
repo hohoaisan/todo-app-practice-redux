@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 
 class TodoAddModal extends Component {
+  constructor(props) {
+    super(props);
+    this.newTodoInputRef = React.createRef();
+  }
+  componentDidMount() {
+    this.newTodoInputRef.current.focus();
+  }
   render() {
     let { onSubmit, onChange, value } = this.props;
     return (
@@ -8,6 +15,7 @@ class TodoAddModal extends Component {
         <div className="container">
           <div className="input-group input-group-lg mb-3 Todo-Add-Input">
             <input
+              ref={this.newTodoInputRef}
               className="form-control"
               type="text"
               placeholder="What do you want to do?"

@@ -10,7 +10,6 @@ class TodoApp extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      toDos: this.props.todos,
       newTodoValue: "",
       showAddModal: false
     };
@@ -22,32 +21,29 @@ class TodoApp extends Component {
     let { showAddModal } = this.state;
     this.setState({ showAddModal: !showAddModal });
   }
-  handleItemClick(id) {
-    let toDos = this.state.toDos.map((item) => {
+  handleItemClick(index) {
+    let { toDos } = this.props;
+    toDos = toDos.map((item) => {
       return { ...item };
     });
-    let [item] = toDos.filter((item) => item.id === id);
+    let item = toDos[index];
     item.isFinished = !item.isFinished;
-    this.setState({ toDos });
+    // this.setState({ toDos });
   }
   addNewTodo(value) {
-    let id = shortid.generate();
-    let item = {
-      id,
-      content: value,
-      isFinished: false
-    };
-    let toDos = this.state.toDos.map((item) => {
-      return { ...item };
+    const { addTodo } = this.props;
+    addTodo(value);
+    this.setState({
+      ...this.state,
+      newTodoValue: ""
     });
-    toDos.push(item);
-    this.setState({ toDos });
   }
   render() {
-    const { showAddModal, newTodoValue, toDos } = this.state;
+    const { showAddModal, newTodoValue } = this.state;
+    const { toDos } = this.props;
     const unFinishedTodos = toDos.filter((item) => !item.isFinished);
     const finishedTodos = toDos.filter((item) => item.isFinished);
-
+    const { addTodo } = this.props;
     return (
       <div className="ToDoApp w-100 h-100">
         {showAddModal && (
@@ -67,14 +63,14 @@ class TodoApp extends Component {
         )}
         <div className="wrapper pt-1 pb-1">
           <div className="container">
-            {this.state.toDos.length ? (
+            {toDos.length ? (
               <div>
                 <div className="ToDo-Section">
                   <h1 className="ToDo-SectionTitle">Upcoming</h1>
                   <div className="Todo-SectionList">
                     {unFinishedTodos.map((item, index) => (
                       <TodoItem
-                        onClick={(event) => this.handleItemClick(item.id)}
+                        onClick={(event) => this.handleItemClick(index)}
                         item={{ ...item, index }}
                         key={index}
                       />
@@ -86,7 +82,7 @@ class TodoApp extends Component {
                   <div className="Todo-SectionList">
                     {finishedTodos.map((item, index) => (
                       <TodoItem
-                        onClick={(event) => this.handleItemClick(item.id)}
+                        onClick={(event) => this.handleItemClick(index)}
                         item={{ ...item, index }}
                         key={index}
                       />

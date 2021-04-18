@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-class TodoItem extends React.PureComponent {
+class TodoItem extends Component {
   render() {
     const { onClick, item } = this.props;
-    const { content, index, id, isFinished } = item;
+    const { content, index, isFinished } = item;
     return (
       <div
-        id={`todo-item-${id}`}
+        id={`todo-item-${index}`}
         className={`Todo-Item card mt-2 mb-2 ${isFinished ? "finished" : ""}`}
         onClick={onClick}
       >

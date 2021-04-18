@@ -2,27 +2,34 @@ import React from "react";
 import "./App.css";
 import "./components/TodoApp";
 import TodoApp from "./components/TodoApp";
-let todos = [
-  // {
-  //   id: 1,
-  //   content: "lorem ipsum",
-  //   isFinished: false
-  // },
-  // {
-  //   id: 2,
-  //   content: "lorem ipsum 2",
-  //   isFinished: false
-  // },
-  // {
-  //   id: 3,
-  //   content: "lorem ipsum 3",
-  //   isFinished: true
-  // }
-];
+import { connect, Provider } from "react-redux";
+import { createStore } from "redux";
+import reducer from "./redux/store";
+import { addTodo } from "./redux/todo";
+
+let store = createStore(
+  reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
+const mapStateToProps = (state) => {
+  return {
+    toDos: state.todo.items
+  };
+};
+
+const mapActionsToProps = {
+  addTodo
+};
+const TodoAppBind = connect(mapStateToProps, mapActionsToProps)(TodoApp);
+let todos = [];
+
 export default function App() {
   return (
-    <div className="App">
-      <TodoApp todos={todos} />
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        {/* <TodoApp todos={todos} /> */}
+        <TodoAppBind />
+      </div>
+    </Provider>
   );
 }
