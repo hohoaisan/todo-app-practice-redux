@@ -4,6 +4,7 @@ import TodoItem from "./ToDoItem";
 import TodoAddButton from "./TodoAddButton";
 import TodoAddModal from "./TodoAddModal";
 import TodoEmpty from "./TodoEmpty";
+import axios from "axios";
 const shortid = require("shortid");
 
 class TodoApp extends Component {
@@ -38,11 +39,15 @@ class TodoApp extends Component {
       newTodoValue: ""
     });
   }
+  componentDidMount() {
+    const { fetchTodos } = this.props;
+    fetchTodos();
+  }
   render() {
     const { showAddModal, newTodoValue } = this.state;
     const { toDos } = this.props;
-    const unFinishedTodos = toDos.filter((item) => !item.isFinished);
-    const finishedTodos = toDos.filter((item) => item.isFinished);
+    const unFinishedTodos = toDos.filter((item) => !item.completed);
+    const finishedTodos = toDos.filter((item) => item.completed);
     const { addTodo } = this.props;
     return (
       <div className="ToDoApp w-100 h-100">
